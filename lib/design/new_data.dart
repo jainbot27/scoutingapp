@@ -10,8 +10,9 @@ class NewData extends StatefulWidget {
 }
 
 class _NewDataState extends State<NewData> {
-  TextEditingController conesController = TextEditingController(text: "0");
-  String conesErrorStr = "";
+  TextEditingController autoPiecesController = TextEditingController(text: "0");
+  TextEditingController nameController = TextEditingController();
+  String autoPiecesControllerStr = "";
   List<String> autoDockList = [
     "Did not dock",
     "Docked but Unbalanced",
@@ -27,15 +28,34 @@ class _NewDataState extends State<NewData> {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        "Name of Scouter:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  Expanded(
+                    child: TextFormField(
+                      textAlign: TextAlign.left,
+                      controller: nameController,
+                    ),
+                  ) 
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Padding(
                       padding: EdgeInsets.all(15),
                       child: Text(
-                        "Number of cones:",
+                        "Auto pieces placed:",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -46,16 +66,16 @@ class _NewDataState extends State<NewData> {
                     decoration: InputDecoration(
                         hintStyle: const TextStyle(color: Colors.green),
                         hintText: "Enter numbers only",
-                        errorText: conesErrorStr),
-                    controller: conesController,
+                        errorText: autoPiecesControllerStr),
+                    controller: autoPiecesController,
                     onChanged: (text) {
                       setState(() {
                         if (text == "") {
-                          conesErrorStr = "Please Type in a Value";
+                          autoPiecesControllerStr = "Please Type in a Value";
                         } else if (double.tryParse(text) == null) {
-                          conesErrorStr = "Please Enter a Number";
+                          autoPiecesControllerStr = "Please Enter a Number";
                         } else {
-                          conesErrorStr = "";
+                          autoPiecesControllerStr = "";
                         }
                       });
                     },
@@ -67,10 +87,10 @@ class _NewDataState extends State<NewData> {
                         icon: const Icon(Icons.arrow_upward_outlined),
                         onPressed: () {
                           setState(() {
-                            String cur = conesController.text;
+                            String cur = autoPiecesController.text;
                             int num = int.parse(cur);
                             num++;
-                            conesController.text = num.toString();
+                            autoPiecesController.text = num.toString();
                           });
                         },
                       ),
@@ -78,10 +98,10 @@ class _NewDataState extends State<NewData> {
                         icon: const Icon(Icons.arrow_downward_outlined),
                         onPressed: () {
                           setState(() {
-                            String cur = conesController.text;
+                            String cur = autoPiecesController.text;
                             int num = int.parse(cur);
                             num--;
-                            conesController.text = num.toString();
+                            autoPiecesController.text = num.toString();
                           });
                         },
                       )

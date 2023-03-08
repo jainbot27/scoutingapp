@@ -22,12 +22,12 @@ class _MyDropdownMenuState extends State<MyDropdownMenu> {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       value: currentValue.isNotEmpty ? currentValue : null,
-      icon: const Icon(Icons.arrow_downward),
+      // icon: const Icon(Icons.arrow_downward),
       elevation: 16,
       style: const TextStyle(color: Colors.green),
       underline: Container(
         height: 2,
-        color: Colors.greenAccent,
+        color: Colors.black,
       ),
       onChanged: (String? value) {
         setState(() {
