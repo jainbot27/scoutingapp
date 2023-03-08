@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import "package:scoutingapp/design/my_dropdown_menu.dart";
 
 class NewData extends StatefulWidget {
   const NewData({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _NewDataState createState() => _NewDataState();
 }
 
 class _NewDataState extends State<NewData> {
   TextEditingController conesController = TextEditingController(text: "0");
-  String errorString = "";
+  String conesErrorStr = "";
+  List<String> autoDockList = [
+    "Did not dock",
+    "Docked but Unbalanced",
+    "Balanced Dock"
+  ];
+  late MyDropdownMenu autoDockMenu = MyDropdownMenu(list: autoDockList);
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +32,35 @@ class _NewDataState extends State<NewData> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Expanded(
-                    child: Text("Number of cones:"),
-                  ),
+                  const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        "Number of cones:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
                   Expanded(
                       child: TextFormField(
+                    textAlign: TextAlign.center,
                     decoration: InputDecoration(
                         hintStyle: const TextStyle(color: Colors.green),
                         hintText: "Enter numbers only",
-                        errorText: errorString),
+                        errorText: conesErrorStr),
                     controller: conesController,
                     onChanged: (text) {
                       setState(() {
                         if (text == "") {
-                          errorString = "Please Type in a Value";
+                          conesErrorStr = "Please Type in a Value";
                         } else if (double.tryParse(text) == null) {
-                          errorString = "Please Enter a Number";
+                          conesErrorStr = "Please Enter a Number";
                         } else {
-                          errorString = "";
+                          conesErrorStr = "";
                         }
                       });
                     },
                   )),
-                  Column(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
@@ -73,6 +87,20 @@ class _NewDataState extends State<NewData> {
                       )
                     ],
                   )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Text(
+                        "Type Of AutoBalancing:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  autoDockMenu
                 ],
               )
             ],
