@@ -15,6 +15,9 @@ class _NewDataState extends State<NewData> {
   TextEditingController midPiecesController = TextEditingController(text: "0");
   TextEditingController lowPiecesController = TextEditingController(text: "0");
   TextEditingController nameController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
+  TextEditingController teamController = TextEditingController();
+  TextEditingController qualController = TextEditingController();
   String autoPiecesControllerStr = "";
   String highPiecesControllerStr = "";
   String midPiecesControllerStr = "";
@@ -57,7 +60,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Name of Scouter:",
                         style: TextStyle(
@@ -73,10 +76,48 @@ class _NewDataState extends State<NewData> {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        "Name of Team Number:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  Expanded(
+                    child: TextFormField(
+                      textAlign: TextAlign.left,
+                      controller: teamController,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        "Qual#:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  Expanded(
+                    child: TextFormField(
+                      textAlign: TextAlign.left,
+                      controller: qualController,
+                    ),
+                  )
+                ],
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Auto pieces placed:",
                         style: TextStyle(
@@ -136,7 +177,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Type Of AutoBalancing:",
                         style: TextStyle(
@@ -150,9 +191,9 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
-                        "Auto Taxi?",
+                        "Auto Mobility?",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -164,7 +205,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Type of Pieces Placed:",
                         style: TextStyle(
@@ -178,7 +219,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Low teleop pieces placed:",
                         style: TextStyle(
@@ -238,7 +279,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Mid teleop pieces placed:",
                         style: TextStyle(
@@ -298,7 +339,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "High teleop pieces placed:",
                         style: TextStyle(
@@ -358,7 +399,7 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Endgame Park?",
                         style: TextStyle(
@@ -372,16 +413,38 @@ class _NewDataState extends State<NewData> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Text(
                         "Type Of Endgame Balancing",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       )),
-                  endgameDockMenu 
+                  endgameDockMenu
                 ],
               ),
+              const Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Text(
+                    "Additional Notes:",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+              Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: TextField(
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 5,
+                    controller: notesController,
+                  ))
             ],
           ),
         ));
