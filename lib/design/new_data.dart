@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import "package:scoutingapp/design/my_dropdown_menu.dart";
+import 'package:scoutingapp/logic/error_pop_up.dart';
+import 'package:path_provider/path_provider.dart';
 
 class NewData extends StatefulWidget {
   const NewData({super.key});
@@ -22,6 +27,7 @@ class _NewDataState extends State<NewData> {
   String highPiecesControllerStr = "";
   String midPiecesControllerStr = "";
   String lowPiecesControllerStr = "";
+  List<String> compList = ["TEST", "Sammamish", "DCMP", "Worlds"];
   List<String> autoDockList = [
     "Did not dock",
     "Docked but Unbalanced",
@@ -40,21 +46,95 @@ class _NewDataState extends State<NewData> {
     "Docked but Unbalanced",
     "Balanced Dock"
   ];
+  late MyDropdownMenu compMenu = MyDropdownMenu(list: compList);
   late MyDropdownMenu pieceMenu = MyDropdownMenu(list: pieceList);
   late MyDropdownMenu autoDockMenu = MyDropdownMenu(list: autoDockList);
   late MyDropdownMenu autoTaxiMenu = MyDropdownMenu(list: autoTaxiList);
   late MyDropdownMenu endgameParkMenu = MyDropdownMenu(list: endgameParkList);
   late MyDropdownMenu endgameDockMenu = MyDropdownMenu(list: endgameDockList);
 
+  void update(BuildContext context) async {
+    if (compMenu.getCurrentValue().isEmpty ||
+        pieceMenu.getCurrentValue().isEmpty ||
+        autoDockMenu.getCurrentValue().isEmpty ||
+        autoTaxiMenu.getCurrentValue().isEmpty ||
+        endgameParkMenu.getCurrentValue().isEmpty ||
+        endgameDockMenu.getCurrentValue().isEmpty) {
+      errorPopUp(context, "Fill out all fields");
+    } else if (autoPiecesController.text.isEmpty ||
+        autoPiecesController.text.isEmpty ||
+        highPiecesController.text.isEmpty ||
+        midPiecesController.text.isEmpty ||
+        lowPiecesController.text.isEmpty ||
+        nameController.text.isEmpty ||
+        // notesController.text.isEmpty ||
+        teamController.text.isEmpty ||
+        qualController.text.isEmpty) {
+      errorPopUp(context, "Fill out all fields");
+    } else if (double.tryParse(autoPiecesController.text) == null ||
+        double.tryParse(highPiecesController.text) == null ||
+        double.tryParse(midPiecesController.text) == null ||
+        double.tryParse(lowPiecesController.text) == null) {
+      errorPopUp(context, "Fill out all fields with integers");
+    }
+
+    // print("${compMenu.getCurrentValue()}\n");
+    Map<String, dynamic> jsonMap = {};
+    jsonMap['Name'] = nameController.text;
+    jsonMap['High Pieces'] = highPiecesController.text;
+    jsonMap['Mid Pieces'] = midPiecesController.text;
+    jsonMap['Low Pieces'] = lowPiecesController.text;
+    jsonMap['Notes'] = notesController.text;
+    jsonMap['Place Cubes'] = (compMenu.getCurrentValue() == pieceList[0] ||
+            compMenu.getCurrentValue() == pieceList[1])
+        ? 1
+        : 0;
+    jsonMap['Place Cones'] = (compMenu.getCurrentValue() == pieceList[0] ||
+            compMenu.getCurrentValue() == pieceList[2])
+        ? 1
+        : 0;
+
+    int autoPoints = 0;
+    autoPoints += autoTaxiMenu.getCurrentValue() == autoTaxiList[0] ? 3 : 0;
+    autoPoints += autoDockMenu.getCurrentValue() == autoDockList[2]
+        ? 12
+        : (autoDockMenu.getCurrentValue() == autoDockList[1] ? 8 : 0);
+    jsonMap['Auto Points'] = autoPoints;
+    int endgamePoints = 0;
+    endgamePoints +=
+        endgameParkMenu.getCurrentValue() == endgameParkList[0] ? 2 : 0;
+    endgamePoints += endgameDockMenu.getCurrentValue() == endgameDockList[2]
+        ? 10
+        : (endgameDockMenu.getCurrentValue() == endgameDockList[1] ? 6 : 0);
+    jsonMap['Endgame Points'] = endgamePoints;
+    jsonMap['Team Number'] = teamController.text;
+    jsonMap['Qual Number'] = qualController.text;
+    jsonMap['Competition'] = compMenu.getCurrentValue();
+
+    String jsonString = json.encode(jsonMap);
+    final Directory documents = await getApplicationDocumentsDirectory();
+    print(documents.path);
+    final File file = File(
+        "${documents.path}/${compMenu.getCurrentValue()}-${qualController.text}-${teamController.text}.json");
+    await file.writeAsString(jsonString);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Add New Scouting Data"),
+          actions: [
+            IconButton(
+              onPressed: () => update(context),
+              icon: const Icon(Icons.save),
+            ),
+          ],
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            shrinkWrap: true,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -73,6 +153,20 @@ class _NewDataState extends State<NewData> {
                       controller: nameController,
                     ),
                   )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        "Which Comp?",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  compMenu
                 ],
               ),
               Row(
@@ -373,7 +467,7 @@ class _NewDataState extends State<NewData> {
                         icon: const Icon(Icons.arrow_upward_outlined),
                         onPressed: () {
                           setState(() {
-                            String cur = midPiecesController.text;
+                            String cur = highPiecesController.text;
                             int num = int.parse(cur);
                             num++;
                             highPiecesController.text = num.toString();
@@ -384,7 +478,7 @@ class _NewDataState extends State<NewData> {
                         icon: const Icon(Icons.arrow_downward_outlined),
                         onPressed: () {
                           setState(() {
-                            String cur = midPiecesController.text;
+                            String cur = highPiecesController.text;
                             int num = int.parse(cur);
                             num--;
                             highPiecesController.text = num.toString();
@@ -444,7 +538,10 @@ class _NewDataState extends State<NewData> {
                     minLines: 1,
                     maxLines: 5,
                     controller: notesController,
-                  ))
+                  )),
+              // TextButton(
+              //     onPressed: () => update(context),
+              //     child: const Text('Upload Data'))
             ],
           ),
         ));
