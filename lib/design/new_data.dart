@@ -85,6 +85,7 @@ class _NewDataState extends State<NewData> {
     jsonMap['Mid Pieces'] = midPiecesController.text;
     jsonMap['Low Pieces'] = lowPiecesController.text;
     jsonMap['Notes'] = notesController.text;
+    jsonMap['Auto Pieces'] = autoPiecesController.text;
     jsonMap['Place Cubes'] = (compMenu.getCurrentValue() == pieceList[0] ||
             compMenu.getCurrentValue() == pieceList[1])
         ? 1

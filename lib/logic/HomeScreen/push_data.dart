@@ -1,5 +1,34 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void pushData(BuildContext context) {
-  
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:scoutingapp/logic/error_pop_up.dart';
+
+
+void pushData(BuildContext context) async {
+  String documents = (await getApplicationDocumentsDirectory()).path;
+  List<FileSystemEntity> files = [];
+  files = Directory(documents).listSync();
+  // Navigator.push(
+  //     context, MaterialPageRoute(builder: (context) => PushData(files)));
+  final storageRef = FirebaseStorage.instance.ref();
+  // Navigator.push(
+  //     context, MaterialPageRoute(builder: (context) => PushData()));
+  for (var element in files) {
+    // print(element.path);
+    File currentData = File(element.path);
+    String filename = currentData.path.split(Platform.pathSeparator).last;
+    try {
+      await storageRef.child(filename).putFile(currentData);
+    } on FirebaseException catch (e) {
+      errorPopUp(context, e.toString());
+    }
+  }
+  errorPopUp(context, "Congrats! You uploaded data");
+
+  for (var element in files) {
+    File currentData = File(element.path);
+    currentData.delete();
+  }
 }
