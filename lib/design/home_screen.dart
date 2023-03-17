@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:scoutingapp/logic/HomeScreen/create_excel_spreadsheets.dart';
 
 import 'package:scoutingapp/logic/HomeScreen/new_data.dart';
 import 'package:scoutingapp/logic/HomeScreen/push_data.dart';
@@ -23,6 +24,10 @@ class HomeScreen extends StatelessWidget {
             TextButton(
                 onPressed: () => pushData(context),
                 child: const Text("Upload Data Stored on Device")),
+            TextButton(
+                onPressed: () => createExcelSpreadsheets(context),
+                child: const Text("Create Spreadsheets")
+            )
           ],
         )));
   }

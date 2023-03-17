@@ -10,11 +10,7 @@ void pushData(BuildContext context) async {
   String documents = (await getApplicationDocumentsDirectory()).path;
   List<FileSystemEntity> files = [];
   files = Directory(documents).listSync();
-  // Navigator.push(
-  //     context, MaterialPageRoute(builder: (context) => PushData(files)));
   final storageRef = FirebaseStorage.instance.ref();
-  // Navigator.push(
-  //     context, MaterialPageRoute(builder: (context) => PushData()));
   for (var element in files) {
     // print(element.path);
     File currentData = File(element.path);
@@ -26,7 +22,6 @@ void pushData(BuildContext context) async {
     }
   }
   errorPopUp(context, "Congrats! You uploaded data");
-
   for (var element in files) {
     File currentData = File(element.path);
     currentData.delete();

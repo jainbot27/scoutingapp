@@ -71,27 +71,29 @@ class _NewDataState extends State<NewData> {
         teamController.text.isEmpty ||
         qualController.text.isEmpty) {
       errorPopUp(context, "Fill out all fields");
-    } else if (double.tryParse(autoPiecesController.text) == null ||
-        double.tryParse(highPiecesController.text) == null ||
-        double.tryParse(midPiecesController.text) == null ||
-        double.tryParse(lowPiecesController.text) == null) {
+    } else if (int.tryParse(autoPiecesController.text) == null ||
+        int.tryParse(highPiecesController.text) == null ||
+        int.tryParse(midPiecesController.text) == null ||
+        int.tryParse(lowPiecesController.text) == null || 
+        int.tryParse(teamController.text) == null ||
+        int.tryParse(qualController.text) == null) {
       errorPopUp(context, "Fill out all fields with integers");
     }
 
     // print("${compMenu.getCurrentValue()}\n");
     Map<String, dynamic> jsonMap = {};
     jsonMap['Name'] = nameController.text;
-    jsonMap['High Pieces'] = highPiecesController.text;
-    jsonMap['Mid Pieces'] = midPiecesController.text;
-    jsonMap['Low Pieces'] = lowPiecesController.text;
+    jsonMap['High Pieces'] = int.parse(highPiecesController.text);
+    jsonMap['Mid Pieces'] = int.parse(midPiecesController.text);
+    jsonMap['Low Pieces'] = int.parse(lowPiecesController.text);
     jsonMap['Notes'] = notesController.text;
     jsonMap['Auto Pieces'] = autoPiecesController.text;
-    jsonMap['Place Cubes'] = (compMenu.getCurrentValue() == pieceList[0] ||
-            compMenu.getCurrentValue() == pieceList[1])
+    jsonMap['Place Cubes'] = (pieceMenu.getCurrentValue() == pieceList[0] ||
+            pieceMenu.getCurrentValue() == pieceList[1])
         ? 1
         : 0;
-    jsonMap['Place Cones'] = (compMenu.getCurrentValue() == pieceList[0] ||
-            compMenu.getCurrentValue() == pieceList[2])
+    jsonMap['Place Cones'] = (pieceMenu.getCurrentValue() == pieceList[0] ||
+            pieceMenu.getCurrentValue() == pieceList[2])
         ? 1
         : 0;
 
@@ -118,6 +120,22 @@ class _NewDataState extends State<NewData> {
     final File file = File(
         "${documents.path}/${compMenu.getCurrentValue()}-${qualController.text}-${teamController.text}.json");
     await file.writeAsString(jsonString);
+    setState(() {
+      autoPiecesController = TextEditingController(text: "0"); 
+      highPiecesController = TextEditingController(text: "0");
+      midPiecesController = TextEditingController(text: "0");
+      lowPiecesController = TextEditingController(text: "0");
+      nameController = TextEditingController();
+      notesController = TextEditingController();
+      teamController = TextEditingController();
+      qualController = TextEditingController();
+      compMenu = MyDropdownMenu(list: compList);
+      pieceMenu = MyDropdownMenu(list: pieceList);
+      autoDockMenu = MyDropdownMenu(list: autoDockList);
+      autoTaxiMenu = MyDropdownMenu(list: autoTaxiList);
+      endgameParkMenu = MyDropdownMenu(list: endgameParkList);
+      endgameDockMenu = MyDropdownMenu(list: endgameDockList);
+    });
   }
 
   @override
