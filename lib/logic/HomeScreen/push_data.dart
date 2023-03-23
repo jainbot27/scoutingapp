@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,7 +14,6 @@ void pushData(BuildContext context) async {
   files = Directory(documents).listSync();
   final storageRef = FirebaseStorage.instance.ref();
   for (var element in files) {
-    // print(element.path);
     File currentData = File(element.path);
     String filename = currentData.path.split(Platform.pathSeparator).last;
     try {
@@ -21,7 +22,7 @@ void pushData(BuildContext context) async {
       errorPopUp(context, e.toString());
     }
   }
-  errorPopUp(context, "Congrats! You uploaded data");
+  errorPopUp(context, "You pushed data!", title: "Congrats!");
   for (var element in files) {
     File currentData = File(element.path);
     currentData.delete();

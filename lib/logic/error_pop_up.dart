@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-void errorPopUp(BuildContext context, String text) {
+void errorPopUp(BuildContext context, String text, {String title = 'Error!'}) {
   showDialog(
       context: context,
       barrierDismissible:
           false, // disables popup to close if tapped outside popup (need a button to close)
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Error!',
+          title: Text(
+            title
           ),
           content: Text(text),
           //buttons?

@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
+
+import '../error_pop_up.dart';
 
 void createExcelSpreadsheets(BuildContext context) async {
   var storageRef = FirebaseStorage.instance.ref();
@@ -20,7 +21,6 @@ void createExcelSpreadsheets(BuildContext context) async {
   Map<String, Map<String, Map<String, Map<String, dynamic>>>> map = {};
   for (Reference items in listJsons.items) {
     var fileRef = storageRef.child(items.name);
-    // print(fileRef.fullPath);
     await fileRef.writeToFile(temporary);
     String s = await temporary.readAsString();
     Map<String, dynamic> information = jsonDecode(s);
@@ -64,7 +64,6 @@ void createExcelSpreadsheets(BuildContext context) async {
   map.forEach((key, value) async {
     final Workbook workbook = Workbook();
     int wsCount = 0;
-    // workbook.worksheets
     value.forEach((key1, value1) {
       if (wsCount == 0) {
         workbook.worksheets[0].name = key1;
@@ -124,5 +123,6 @@ void createExcelSpreadsheets(BuildContext context) async {
     outputFile.delete();
   });
   // print(map);
+  errorPopUp(context, "You created spreadsheets", title: "Congrats!");
   temporary.delete();
 }

@@ -116,10 +116,10 @@ class _NewDataState extends State<NewData> {
 
     String jsonString = json.encode(jsonMap);
     final Directory documents = await getApplicationDocumentsDirectory();
-    print(documents.path);
     final File file = File(
         "${documents.path}/${compMenu.getCurrentValue()}-${qualController.text}-${teamController.text}.json");
     await file.writeAsString(jsonString);
+
     setState(() {
       autoPiecesController = TextEditingController(text: "0"); 
       highPiecesController = TextEditingController(text: "0");
@@ -129,12 +129,12 @@ class _NewDataState extends State<NewData> {
       notesController = TextEditingController();
       teamController = TextEditingController();
       qualController = TextEditingController();
-      compMenu = MyDropdownMenu(list: compList);
-      pieceMenu = MyDropdownMenu(list: pieceList);
-      autoDockMenu = MyDropdownMenu(list: autoDockList);
-      autoTaxiMenu = MyDropdownMenu(list: autoTaxiList);
-      endgameParkMenu = MyDropdownMenu(list: endgameParkList);
-      endgameDockMenu = MyDropdownMenu(list: endgameDockList);
+      // compMenu = MyDropdownMenu(list: compList);
+      // pieceMenu = MyDropdownMenu(list: pieceList);
+      // autoDockMenu = MyDropdownMenu(list: autoDockList);
+      // autoTaxiMenu = MyDropdownMenu(list: autoTaxiList);
+      // endgameParkMenu = MyDropdownMenu(list: endgameParkList);
+      // endgameDockMenu = MyDropdownMenu(list: endgameDockList);
     });
   }
 
